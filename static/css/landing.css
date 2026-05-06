@@ -1,0 +1,219 @@
+/* ------------------------------------------------------------------ */
+/* Hero v2 — landing page only                                         */
+/* ------------------------------------------------------------------ */
+
+.lhero {
+    padding: 4rem 2rem 5rem;
+    text-align: center;
+    background: var(--paper);
+}
+
+.lhero-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+/* Badge */
+.lhero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--accent-light);
+    border: 1px solid #c5dfc9;
+    border-radius: 999px;
+    padding: 0.4rem 1.1rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--accent);
+}
+
+.lhero-dot {
+    width: 7px;
+    height: 7px;
+    background: var(--accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Title */
+.lhero-title {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1.1;
+    color: var(--ink);
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.lhero-green {
+    color: var(--accent);
+}
+
+/* Subtitle */
+.lhero-subtitle {
+    font-size: 1.1rem;
+    color: var(--ink-muted);
+    line-height: 1.7;
+    max-width: 520px;
+}
+
+/* Buttons */
+.lhero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.lbtn {
+    display: inline-block;
+    padding: 0.8rem 1.9rem;
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.lbtn-dark {
+    background: var(--ink);
+    color: var(--paper);
+}
+
+.lbtn-dark:hover {
+    background: var(--accent);
+}
+
+/* ------------------------------------------------------------------ */
+/* Mockup                                                              */
+/* ------------------------------------------------------------------ */
+
+.lmockup {
+    width: 100%;
+    background: var(--paper-warm);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.06);
+    text-align: left;
+}
+
+.lmockup-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.9rem 1.1rem;
+}
+
+.ltl {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+.ltl-r { background: #ef4444; }
+.ltl-y { background: #f59e0b; }
+.ltl-g { background: #22c55e; }
+
+.lmockup-body {
+    padding: 0 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* Stat cards */
+.lstats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+
+.lstat-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.lstat-label {
+    font-size: 0.78rem;
+    color: var(--ink-muted);
+}
+
+.lstat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+}
+
+.lstat-big {
+    font-size: 2rem;
+}
+
+.lstat-sub {
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-top: 0.1rem;
+}
+.lstat-red   { color: #c0392b; }
+.lstat-green { color: var(--accent); }
+.lstat-muted { color: var(--ink-muted); }
+
+/* Category bars */
+.lcats {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+.lcat-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.lcat-name {
+    width: 52px;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    font-weight: 500;
+    flex-shrink: 0;
+}
+
+.lcat-track {
+    flex: 1;
+    height: 9px;
+    background: var(--border-soft);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.lcat-fill {
+    height: 100%;
+    border-radius: 999px;
+}
+
+.lcat-food   { background: #e09c3a; }
+.lcat-travel { background: #4a90d9; }
+.lcat-bills  { background: #7c6bc9; }
+
+/* Responsive */
+@media (max-width: 600px) {
+    .lstats { grid-template-columns: 1fr; }
+    .lhero-title { font-size: 2.2rem; }
+}
