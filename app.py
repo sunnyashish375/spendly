@@ -1,7 +1,8 @@
 import os
 import sqlite3
-from flask import Flask, render_template, request, redirect, url_for, session
-from database.db import get_db, init_db, seed_db, create_user
+from flask import Flask, render_template, request, redirect, url_for, session, abort
+from werkzeug.security import check_password_hash
+from database.db import get_db, init_db, seed_db, create_user, get_user_by_email
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-change-me')
@@ -32,6 +33,8 @@ def privacy():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    if session.get("user_id"):
+        return redirect(url_for("landing"))
     if request.method == "GET":
         return render_template("register.html")
 
@@ -58,18 +61,44 @@ def register():
     return redirect(url_for("login"))
 
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    return render_template("login.html")
+    if session.get("user_id"):
+        return redirect(url_for("landing"))
+    if request.method == "GET":
+        next_url = request.args.get("next", "")
+        return render_template("login.html", next=next_url)
+
+    email = request.form.get("email", "").strip().lower()
+    password = request.form.get("password", "")
+    next_url = request.form.get("next", "")
+
+    if not email or not password:
+        return render_template("login.html", error="Invalid email or password.", email=email, next=next_url)
+
+    user = get_user_by_email(email)
+
+    if user is None or not check_password_hash(user["password_hash"], password):
+        return render_template("login.html", error="Invalid email or password.", email=email, next=next_url)
+
+    session.clear()
+    session["user_id"] = user["id"]
+
+    if next_url and next_url.startswith("/") and not next_url.startswith("//"):
+        return redirect(next_url)
+    return redirect(url_for("landing"))
 
 
 # ------------------------------------------------------------------ #
 # Placeholder routes — students will implement these                  #
 # ------------------------------------------------------------------ #
 
-@app.route("/logout")
+@app.route("/logout", methods=["GET", "POST"])
 def logout():
-    return "Logout — coming in Step 3"
+    if request.method == "POST":
+        abort(405)
+    session.clear()
+    return redirect(url_for("landing"))
 
 
 @app.route("/profile")
