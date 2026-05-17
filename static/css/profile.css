@@ -1,0 +1,248 @@
+.profile-page {
+    padding: 3rem 1rem;
+}
+
+.profile-container {
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* ---- Account card ---- */
+.profile-account-card {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+}
+
+.profile-avatar {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--paper-card);
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 0.03em;
+    user-select: none;
+}
+
+.profile-account-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.profile-name {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--ink);
+    margin: 0 0 0.2rem;
+}
+
+.profile-meta {
+    font-size: 0.875rem;
+    color: var(--ink-muted);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ---- Stats row ---- */
+.profile-stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.profile-stat-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.profile-stat-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--ink-muted);
+}
+
+.profile-stat-value {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    color: var(--ink);
+    line-height: 1;
+}
+
+/* ---- Generic card ---- */
+.profile-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+}
+
+.profile-card-title {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    color: var(--ink);
+    margin: 0 0 1.25rem;
+}
+
+/* ---- Category bars ---- */
+.profile-cat-row {
+    display: grid;
+    grid-template-columns: 110px 1fr 80px;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.65rem;
+}
+
+.profile-cat-row:last-child {
+    margin-bottom: 0;
+}
+
+.profile-cat-name {
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profile-cat-track {
+    height: 8px;
+    background: var(--accent-light);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.profile-cat-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 999px;
+    min-width: 4px;
+}
+
+.profile-cat-amt {
+    font-size: 0.875rem;
+    color: var(--ink-soft);
+    text-align: right;
+}
+
+/* ---- Recent expenses table ---- */
+.profile-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.profile-table th {
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-muted);
+    padding: 0 0.5rem 0.75rem 0;
+    text-align: left;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.profile-th-amt,
+.profile-td-amt {
+    text-align: right;
+    padding-right: 0 !important;
+}
+
+.profile-table tbody tr {
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.profile-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.profile-table td {
+    padding: 0.65rem 0.5rem 0.65rem 0;
+    color: var(--ink-soft);
+    vertical-align: middle;
+}
+
+.profile-badge {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    border-radius: var(--radius-sm);
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.profile-td-desc {
+    color: var(--ink-muted);
+    font-size: 0.875rem;
+}
+
+.profile-td-amt {
+    font-weight: 500;
+    color: var(--ink);
+}
+
+/* ---- Empty state ---- */
+.profile-empty {
+    text-align: center;
+    padding: 3rem;
+    color: var(--ink-muted);
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+}
+
+/* ---- Mobile ---- */
+@media (max-width: 600px) {
+    .profile-account-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .profile-meta {
+        white-space: normal;
+    }
+
+    .profile-stats-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+
+    .profile-stat-value {
+        font-size: 1.4rem;
+    }
+
+    .profile-cat-row {
+        grid-template-columns: 80px 1fr 65px;
+        gap: 0.5rem;
+    }
+
+    .profile-th-desc,
+    .profile-td-desc {
+        display: none;
+    }
+}

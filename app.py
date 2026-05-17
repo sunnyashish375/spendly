@@ -1,8 +1,9 @@
 import os
 import sqlite3
+from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, session, abort
 from werkzeug.security import check_password_hash
-from database.db import get_db, init_db, seed_db, create_user, get_user_by_email
+from database.db import get_db, init_db, seed_db, create_user, get_user_by_email, get_user_by_id, get_expenses_by_user_id
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-change-me')
@@ -34,7 +35,7 @@ def privacy():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if session.get("user_id"):
-        return redirect(url_for("landing"))
+        return redirect(url_for("profile"))
     if request.method == "GET":
         return render_template("register.html")
 
@@ -58,13 +59,13 @@ def register():
         return render_template("register.html", error="An account with that email already exists.", name=name, email=email)
 
     session["user_id"] = user_id
-    return redirect(url_for("login"))
+    return redirect(url_for("profile"))
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if session.get("user_id"):
-        return redirect(url_for("landing"))
+        return redirect(url_for("profile"))
     if request.method == "GET":
         next_url = request.args.get("next", "")
         return render_template("login.html", next=next_url)
@@ -86,7 +87,7 @@ def login():
 
     if next_url and next_url.startswith("/") and not next_url.startswith("//"):
         return redirect(next_url)
-    return redirect(url_for("landing"))
+    return redirect(url_for("profile"))
 
 
 # ------------------------------------------------------------------ #
@@ -103,7 +104,37 @@ def logout():
 
 @app.route("/profile")
 def profile():
-    return "Profile page — coming in Step 4"
+    if not session.get("user_id"):
+        return redirect(url_for("login", next="/profile"))
+    user = get_user_by_id(session["user_id"])
+    if user is None:
+        abort(404)
+    created_raw = user["created_at"]
+    member_since = (
+        datetime.strptime(created_raw, "%Y-%m-%d %H:%M:%S").strftime("%B %d, %Y")
+        if created_raw else "—"
+    )
+    expenses = get_expenses_by_user_id(session["user_id"])
+    total_spent = sum(e["amount"] for e in expenses)
+    expense_count = len(expenses)
+    raw_totals = {}
+    for e in expenses:
+        raw_totals[e["category"]] = raw_totals.get(e["category"], 0) + e["amount"]
+    category_totals = [
+        (cat, amt, round(amt / total_spent * 100) if total_spent else 0)
+        for cat, amt in sorted(raw_totals.items(), key=lambda x: x[1], reverse=True)
+    ]
+    recent_expenses = expenses[:5]
+    return render_template(
+        "profile.html",
+        name=user["name"],
+        email=user["email"],
+        member_since=member_since,
+        total_spent=total_spent,
+        expense_count=expense_count,
+        category_totals=category_totals,
+        recent_expenses=recent_expenses,
+    )
 
 
 @app.route("/expenses/add")
