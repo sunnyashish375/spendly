@@ -1,13 +1,15 @@
 import os
 import sqlite3
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from flask import Flask, render_template, request, redirect, url_for, session, abort
+from markupsafe import Markup
 from werkzeug.security import check_password_hash
 from database.db import (
     get_db, init_db, seed_db, create_user,
     get_user_by_email, get_user_by_id,
     get_recent_expenses, get_all_expenses,
     get_expense_stats, get_categories,
+    get_expense_stats_filtered, get_expenses_filtered,
 )
 
 app = Flask(__name__)
@@ -16,6 +18,55 @@ app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-change-me')
 with app.app_context():
     init_db()
     seed_db()
+
+
+def _parse_date_range(args):
+    s = args.get("start", "").strip()
+    e = args.get("end", "").strip()
+    if not s or not e:
+        return None, None
+    try:
+        if date.fromisoformat(s) > date.fromisoformat(e):
+            return None, None
+    except ValueError:
+        return None, None
+    return s, e
+
+
+def _resolve_preset(start_date, end_date):
+    today = date.today()
+    first_this = today.replace(day=1)
+    last_month_end = first_this - timedelta(days=1)
+    last_month_start = last_month_end.replace(day=1)
+    last30_start = today - timedelta(days=29)
+
+    if start_date is None:
+        return "all_time", "All time"
+    if start_date == first_this.isoformat() and end_date == today.isoformat():
+        return "this_month", first_this.strftime("%B %Y")
+    if start_date == last_month_start.isoformat() and end_date == last_month_end.isoformat():
+        return "last_month", last_month_start.strftime("%B %Y")
+    if start_date == last30_start.isoformat() and end_date == today.isoformat():
+        return "last_30", "Last 30 days"
+    return "custom", f"{start_date} – {end_date}"
+
+
+def _build_presets(endpoint):
+    today = date.today()
+    first_this = today.replace(day=1)
+    last_month_end = first_this - timedelta(days=1)
+    last_month_start = last_month_end.replace(day=1)
+    last30_start = today - timedelta(days=29)
+
+    def u(s, e):
+        return Markup(url_for(endpoint, start=s.isoformat(), end=e.isoformat()))
+
+    return {
+        "this_month": u(first_this, today),
+        "last_month": u(last_month_start, last_month_end),
+        "last_30":    u(last30_start, today),
+        "all_time":   Markup(url_for(endpoint)),
+    }
 
 
 # ------------------------------------------------------------------ #
@@ -119,8 +170,15 @@ def profile():
         datetime.strptime(created_raw, "%Y-%m-%d %H:%M:%S").strftime("%B %d, %Y")
         if created_raw else "—"
     )
-    stats = get_expense_stats(session["user_id"])
+    start_date, end_date = _parse_date_range(request.args)
+    stats = get_expense_stats_filtered(session["user_id"], start_date, end_date)
     recent_expenses = get_recent_expenses(session["user_id"], limit=5)
+    active_preset, period_label = _resolve_preset(start_date, end_date)
+    presets = _build_presets("profile")
+    expenses_url = (
+        url_for("expenses_list", start=start_date, end=end_date)
+        if start_date else url_for("expenses_list")
+    )
     return render_template(
         "profile.html",
         name=user["name"],
@@ -130,6 +188,12 @@ def profile():
         expense_count=stats["expense_count"],
         category_totals=stats["category_totals"],
         recent_expenses=recent_expenses,
+        presets=presets,
+        active_preset=active_preset,
+        period_label=period_label,
+        start_date=start_date or "",
+        end_date=end_date or "",
+        expenses_url=expenses_url,
     )
 
 
@@ -137,8 +201,19 @@ def profile():
 def expenses_list():
     if not session.get("user_id"):
         return redirect(url_for("login", next="/profile/expenses"))
-    expenses = get_all_expenses(session["user_id"])
-    return render_template("expenses.html", expenses=expenses)
+    start_date, end_date = _parse_date_range(request.args)
+    expenses = get_expenses_filtered(session["user_id"], start_date, end_date)
+    active_preset, period_label = _resolve_preset(start_date, end_date)
+    presets = _build_presets("expenses_list")
+    return render_template(
+        "expenses.html",
+        expenses=expenses,
+        presets=presets,
+        active_preset=active_preset,
+        period_label=period_label,
+        start_date=start_date or "",
+        end_date=end_date or "",
+    )
 
 
 @app.route("/expenses/add")
