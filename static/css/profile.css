@@ -98,11 +98,33 @@
     padding: 1.5rem;
 }
 
+.profile-card-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+
 .profile-card-title {
     font-family: var(--font-display);
     font-size: 1.05rem;
     color: var(--ink);
     margin: 0 0 1.25rem;
+}
+
+.profile-card-header .profile-card-title {
+    margin-bottom: 0;
+}
+
+.profile-view-all {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.profile-view-all:hover {
+    text-decoration: underline;
 }
 
 /* ---- Category bars ---- */
