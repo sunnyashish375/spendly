@@ -1,0 +1,125 @@
+.expenses-page {
+    padding: 3rem 1rem;
+}
+
+.expenses-container {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.expenses-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.expenses-title {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    color: var(--ink);
+    margin: 0;
+}
+
+.expenses-back-link {
+    font-size: 0.875rem;
+    color: var(--accent);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.expenses-back-link:hover {
+    text-decoration: underline;
+}
+
+.expenses-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    overflow-x: auto;
+}
+
+.expenses-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.expenses-table th {
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+    opacity: 0.5;
+    padding: 0 0.5rem 0.75rem 0;
+    text-align: left;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.expenses-th-amt,
+.expenses-td-amt {
+    text-align: right;
+    padding-right: 0 !important;
+}
+
+.expenses-table tbody tr {
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.expenses-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.expenses-table td {
+    padding: 0.65rem 0.5rem 0.65rem 0;
+    color: var(--ink);
+    vertical-align: middle;
+}
+
+.expenses-badge {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    border-radius: var(--radius-sm);
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.expenses-td-desc {
+    opacity: 0.6;
+    font-size: 0.875rem;
+}
+
+.expenses-td-amt {
+    font-weight: 500;
+}
+
+.expenses-empty {
+    text-align: center;
+    padding: 3rem;
+    color: var(--ink-muted);
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+}
+
+@media (max-width: 600px) {
+    .expenses-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .expenses-th-desc,
+    .expenses-td-desc {
+        display: none;
+    }
+}

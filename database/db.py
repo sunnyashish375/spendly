@@ -4,7 +4,6 @@ from werkzeug.security import generate_password_hash
 
 DB_PATH = os.path.join(os.path.dirname(__file__), '..', 'spendly.db')
 
-
 def get_db():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
@@ -71,6 +70,58 @@ def get_expenses_by_user_id(user_id):
     ).fetchall()
     conn.close()
     return rows
+
+
+def get_recent_expenses(user_id, limit=5):
+    conn = get_db()
+    rows = conn.execute(
+        "SELECT * FROM expenses WHERE user_id = ? ORDER BY date DESC LIMIT ?",
+        (user_id, limit)
+    ).fetchall()
+    conn.close()
+    return rows
+
+
+def get_all_expenses(user_id):
+    conn = get_db()
+    rows = conn.execute(
+        "SELECT * FROM expenses WHERE user_id = ? ORDER BY date DESC",
+        (user_id,)
+    ).fetchall()
+    conn.close()
+    return rows
+
+
+def get_expense_stats(user_id):
+    conn = get_db()
+    rows = conn.execute(
+        "SELECT amount, category FROM expenses WHERE user_id = ?",
+        (user_id,)
+    ).fetchall()
+    conn.close()
+    total_spent = sum(r["amount"] for r in rows)
+    expense_count = len(rows)
+    raw_totals = {}
+    for r in rows:
+        raw_totals[r["category"]] = raw_totals.get(r["category"], 0) + r["amount"]
+    category_totals = [
+        (cat, amt, round(amt / total_spent * 100) if total_spent else 0)
+        for cat, amt in sorted(raw_totals.items(), key=lambda x: x[1], reverse=True)
+    ]
+    return {
+        "total_spent": total_spent,
+        "expense_count": expense_count,
+        "category_totals": category_totals,
+    }
+
+
+def get_categories():
+    conn = get_db()
+    rows = conn.execute(
+        "SELECT DISTINCT category FROM expenses ORDER BY category ASC"
+    ).fetchall()
+    conn.close()
+    return [r["category"] for r in rows]
 
 
 def seed_db():

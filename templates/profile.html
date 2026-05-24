@@ -36,7 +36,7 @@
             <div class="profile-cat-row">
                 <span class="profile-cat-name">{{ category }}</span>
                 <div class="profile-cat-track">
-                    <div class="profile-cat-fill" style="width: {{ pct }}%"></div>
+                    <div class="profile-cat-fill" style="width: {{ pct }}%" data-category="{{ category }}"></div>
                 </div>
                 <span class="profile-cat-amt">&#8377;{{ "%.2f"|format(amount) }}</span>
             </div>
@@ -44,7 +44,10 @@
         </div>
 
         <div class="profile-card">
-            <h2 class="profile-card-title">Recent Expenses</h2>
+            <div class="profile-card-header">
+                <h2 class="profile-card-title">Recent Expenses</h2>
+                <a href="{{ url_for('expenses_list') }}" class="profile-view-all">View all &rarr;</a>
+            </div>
             <table class="profile-table">
                 <thead>
                     <tr>
@@ -58,7 +61,7 @@
                     {% for e in recent_expenses %}
                     <tr>
                         <td>{{ e["date"] }}</td>
-                        <td><span class="profile-badge">{{ e["category"] }}</span></td>
+                        <td><span class="profile-badge" data-category="{{ e['category'] }}">{{ e["category"] }}</span></td>
                         <td class="profile-td-desc">{{ e["description"] or "—" }}</td>
                         <td class="profile-td-amt">&#8377;{{ "%.2f"|format(e["amount"]) }}</td>
                     </tr>

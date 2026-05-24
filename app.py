@@ -3,7 +3,12 @@ import sqlite3
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, session, abort
 from werkzeug.security import check_password_hash
-from database.db import get_db, init_db, seed_db, create_user, get_user_by_email, get_user_by_id, get_expenses_by_user_id
+from database.db import (
+    get_db, init_db, seed_db, create_user,
+    get_user_by_email, get_user_by_id,
+    get_recent_expenses, get_all_expenses,
+    get_expense_stats, get_categories,
+)
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret-change-me')
@@ -114,27 +119,26 @@ def profile():
         datetime.strptime(created_raw, "%Y-%m-%d %H:%M:%S").strftime("%B %d, %Y")
         if created_raw else "—"
     )
-    expenses = get_expenses_by_user_id(session["user_id"])
-    total_spent = sum(e["amount"] for e in expenses)
-    expense_count = len(expenses)
-    raw_totals = {}
-    for e in expenses:
-        raw_totals[e["category"]] = raw_totals.get(e["category"], 0) + e["amount"]
-    category_totals = [
-        (cat, amt, round(amt / total_spent * 100) if total_spent else 0)
-        for cat, amt in sorted(raw_totals.items(), key=lambda x: x[1], reverse=True)
-    ]
-    recent_expenses = expenses[:5]
+    stats = get_expense_stats(session["user_id"])
+    recent_expenses = get_recent_expenses(session["user_id"], limit=5)
     return render_template(
         "profile.html",
         name=user["name"],
         email=user["email"],
         member_since=member_since,
-        total_spent=total_spent,
-        expense_count=expense_count,
-        category_totals=category_totals,
+        total_spent=stats["total_spent"],
+        expense_count=stats["expense_count"],
+        category_totals=stats["category_totals"],
         recent_expenses=recent_expenses,
     )
+
+
+@app.route("/profile/expenses")
+def expenses_list():
+    if not session.get("user_id"):
+        return redirect(url_for("login", next="/profile/expenses"))
+    expenses = get_all_expenses(session["user_id"])
+    return render_template("expenses.html", expenses=expenses)
 
 
 @app.route("/expenses/add")
