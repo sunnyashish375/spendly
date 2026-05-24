@@ -27,7 +27,9 @@
         </p>
 
         <div class="lhero-actions">
+            {% if not session.get('user_id') %}
             <a href="{{ url_for('register') }}" class="lbtn lbtn-dark">Create free account</a>
+            {% endif %}
             <a href="#" class="lbtn lbtn-dark" id="openHowItWorks">See how it works</a>
         </div>
 
@@ -99,7 +101,9 @@
     <div class="cta-inner">
         <h2 class="cta-title">Ready to take control?</h2>
         <p class="cta-body">Join thousands of people who track their expenses with Spendly.</p>
+        {% if not session.get('user_id') %}
         <a href="{{ url_for('register') }}" class="btn-primary">Create free account</a>
+        {% endif %}
     </div>
 </section>
 
