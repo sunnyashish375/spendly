@@ -3,7 +3,7 @@
 }
 
 .profile-container {
-    max-width: 720px;
+    max-width: 960px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -267,4 +267,79 @@
     .profile-td-desc {
         display: none;
     }
+}
+
+/* ---- Date filter bar ---- */
+.profile-filter-bar {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.profile-filter-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.profile-filter-presets {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+}
+
+.profile-filter-btn {
+    display: inline-block;
+    padding: 0.35rem 0.875rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: all 0.15s;
+}
+
+.profile-filter-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.profile-filter-btn--active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--paper-card);
+}
+
+.profile-filter-btn--active:hover {
+    background: var(--accent);
+    color: var(--paper-card);
+}
+
+.profile-filter-custom {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.5rem;
+    padding-left: 0.75rem;
+    border-left: 1px solid var(--border);
+}
+
+.profile-filter-custom .form-input {
+    width: auto;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.85rem;
+}
+
+.profile-filter-period {
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    padding-top: 0.25rem;
+    border-top: 1px solid var(--border-soft);
 }

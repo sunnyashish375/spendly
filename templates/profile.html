@@ -17,6 +17,35 @@
             </div>
         </div>
 
+        <div class="profile-filter-bar">
+            <div class="profile-filter-row">
+                <div class="profile-filter-presets">
+                    <a href="{{ presets.this_month }}"
+                       class="profile-filter-btn{% if active_preset == 'this_month' %} profile-filter-btn--active{% endif %}">
+                        This Month
+                    </a>
+                    <a href="{{ presets.last_month }}"
+                       class="profile-filter-btn{% if active_preset == 'last_month' %} profile-filter-btn--active{% endif %}">
+                        Last Month
+                    </a>
+                    <a href="{{ presets.last_30 }}"
+                       class="profile-filter-btn{% if active_preset == 'last_30' %} profile-filter-btn--active{% endif %}">
+                        Last 30 Days
+                    </a>
+                    <a href="{{ presets.all_time }}"
+                       class="profile-filter-btn{% if active_preset == 'all_time' %} profile-filter-btn--active{% endif %}">
+                        All Time
+                    </a>
+                </div>
+                <form class="profile-filter-custom" method="get" action="{{ url_for('profile') }}">
+                    <input class="form-input" type="date" name="start" value="{{ start_date }}" required>
+                    <input class="form-input" type="date" name="end" value="{{ end_date }}" required>
+                    <button class="btn-primary" type="submit" style="padding:0.35rem 1rem;font-size:0.85rem;">Apply</button>
+                </form>
+            </div>
+            <p class="profile-filter-period">{{ period_label }}</p>
+        </div>
+
         {% if expense_count %}
 
         <div class="profile-stats-row">
@@ -46,7 +75,7 @@
         <div class="profile-card">
             <div class="profile-card-header">
                 <h2 class="profile-card-title">Recent Expenses</h2>
-                <a href="{{ url_for('expenses_list') }}" class="profile-view-all">View all &rarr;</a>
+                <a href="{{ expenses_url }}" class="profile-view-all">View all &rarr;</a>
             </div>
             <table class="profile-table">
                 <thead>

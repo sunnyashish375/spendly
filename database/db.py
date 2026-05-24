@@ -115,6 +115,49 @@ def get_expense_stats(user_id):
     }
 
 
+def get_expense_stats_filtered(user_id, start_date=None, end_date=None):
+    conn = get_db()
+    if start_date and end_date:
+        rows = conn.execute(
+            "SELECT amount, category FROM expenses "
+            "WHERE user_id = ? AND date BETWEEN ? AND ?",
+            (user_id, start_date, end_date)
+        ).fetchall()
+    else:
+        rows = conn.execute(
+            "SELECT amount, category FROM expenses WHERE user_id = ?",
+            (user_id,)
+        ).fetchall()
+    conn.close()
+    total_spent = sum(r["amount"] for r in rows)
+    expense_count = len(rows)
+    raw_totals = {}
+    for r in rows:
+        raw_totals[r["category"]] = raw_totals.get(r["category"], 0) + r["amount"]
+    category_totals = [
+        (cat, amt, round(amt / total_spent * 100) if total_spent else 0)
+        for cat, amt in sorted(raw_totals.items(), key=lambda x: x[1], reverse=True)
+    ]
+    return {"total_spent": total_spent, "expense_count": expense_count, "category_totals": category_totals}
+
+
+def get_expenses_filtered(user_id, start_date=None, end_date=None):
+    conn = get_db()
+    if start_date and end_date:
+        rows = conn.execute(
+            "SELECT * FROM expenses "
+            "WHERE user_id = ? AND date BETWEEN ? AND ? ORDER BY date DESC",
+            (user_id, start_date, end_date)
+        ).fetchall()
+    else:
+        rows = conn.execute(
+            "SELECT * FROM expenses WHERE user_id = ? ORDER BY date DESC",
+            (user_id,)
+        ).fetchall()
+    conn.close()
+    return rows
+
+
 def get_categories():
     conn = get_db()
     rows = conn.execute(

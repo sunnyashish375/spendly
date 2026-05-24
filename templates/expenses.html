@@ -15,6 +15,35 @@
             <a href="{{ url_for('profile') }}" class="expenses-back-link">&larr; Back to Profile</a>
         </div>
 
+        <div class="expenses-filter-bar">
+            <div class="expenses-filter-row">
+                <div class="expenses-filter-presets">
+                    <a href="{{ presets.this_month }}"
+                       class="expenses-filter-btn{% if active_preset == 'this_month' %} expenses-filter-btn--active{% endif %}">
+                        This Month
+                    </a>
+                    <a href="{{ presets.last_month }}"
+                       class="expenses-filter-btn{% if active_preset == 'last_month' %} expenses-filter-btn--active{% endif %}">
+                        Last Month
+                    </a>
+                    <a href="{{ presets.last_30 }}"
+                       class="expenses-filter-btn{% if active_preset == 'last_30' %} expenses-filter-btn--active{% endif %}">
+                        Last 30 Days
+                    </a>
+                    <a href="{{ presets.all_time }}"
+                       class="expenses-filter-btn{% if active_preset == 'all_time' %} expenses-filter-btn--active{% endif %}">
+                        All Time
+                    </a>
+                </div>
+                <form class="expenses-filter-custom" method="get" action="{{ url_for('expenses_list') }}">
+                    <input class="form-input" type="date" name="start" value="{{ start_date }}" required>
+                    <input class="form-input" type="date" name="end" value="{{ end_date }}" required>
+                    <button class="btn-primary" type="submit" style="padding:0.35rem 1rem;font-size:0.85rem;">Apply</button>
+                </form>
+            </div>
+            <p class="expenses-filter-period">{{ period_label }}</p>
+        </div>
+
         {% if expenses %}
         <div class="expenses-card">
             <table class="expenses-table">
