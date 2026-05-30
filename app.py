@@ -141,6 +141,13 @@ def expenses_list():
     return render_template("expenses.html", expenses=expenses)
 
 
+@app.route("/analytics")
+def analytics():
+    if not session.get("user_id"):
+        return redirect(url_for("login", next="/analytics"))
+    return render_template("analytics.html")
+
+
 @app.route("/expenses/add")
 def add_expense():
     return "Add expense — coming in Step 7"

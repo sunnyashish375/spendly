@@ -1,0 +1,98 @@
+/* ------------------------------------------------------------------ */
+/* Analytics — Coming Soon page                                        */
+/* ------------------------------------------------------------------ */
+
+.analytics-page {
+    min-height: calc(100vh - 60px - 100px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+}
+
+.analytics-container {
+    max-width: 640px;
+    width: 100%;
+    text-align: center;
+}
+
+.analytics-icon-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.75rem;
+}
+
+.analytics-icon-box {
+    width: 112px;
+    height: 112px;
+    background: var(--accent);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 32px rgba(26, 71, 42, 0.25);
+}
+
+.analytics-icon-box svg {
+    width: 56px;
+    height: 56px;
+    color: #ffffff;
+    stroke: #ffffff;
+}
+
+.analytics-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.6rem 2rem;
+    border-radius: 999px;
+    margin-bottom: 2rem;
+}
+
+.analytics-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    margin-bottom: 1.25rem;
+}
+
+.analytics-desc {
+    font-size: 1rem;
+    color: var(--ink-muted);
+    line-height: 1.75;
+    max-width: 500px;
+    margin: 0 auto 2.5rem;
+}
+
+.analytics-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.analytics-dot {
+    width: 12px;
+    height: 12px;
+    background: var(--ink-faint);
+    border-radius: 50%;
+    animation: analytics-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.analytics-dot:nth-child(2) { animation-delay: 0.2s; }
+.analytics-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes analytics-pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.35; }
+}
+
+.analytics-tagline {
+    font-size: 0.9rem;
+    color: var(--ink-faint);
+}
