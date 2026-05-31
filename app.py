@@ -10,6 +10,7 @@ from database.db import (
     get_recent_expenses, get_all_expenses,
     get_expense_stats, get_categories,
     get_expense_stats_filtered, get_expenses_filtered,
+    add_expense,
 )
 
 app = Flask(__name__)
@@ -223,9 +224,49 @@ def analytics():
     return render_template("analytics.html")
 
 
-@app.route("/expenses/add")
-def add_expense():
-    return "Add expense — coming in Step 7"
+ALLOWED_CATEGORIES = ["Food", "Transport", "Bills", "Health", "Entertainment", "Shopping", "Other"]
+
+
+@app.route("/expenses/add", methods=["GET", "POST"])
+def add_expense_route():
+    if not session.get("user_id"):
+        return redirect(url_for("login", next="/expenses/add"))
+
+    if request.method == "GET":
+        today = date.today().isoformat()
+        return render_template("add_expense.html", today=today, categories=ALLOWED_CATEGORIES)
+
+    amount_raw = request.form.get("amount", "").strip()
+    category = request.form.get("category", "").strip()
+    date_raw = request.form.get("date", "").strip()
+    description = request.form.get("description", "").strip()
+
+    def fail(msg):
+        return render_template(
+            "add_expense.html",
+            error=msg,
+            amount=amount_raw, category=category,
+            date=date_raw, description=description,
+            categories=ALLOWED_CATEGORIES,
+        )
+
+    try:
+        amount = float(amount_raw)
+        if amount <= 0:
+            raise ValueError
+    except ValueError:
+        return fail("Amount must be a positive number.")
+
+    if category not in ALLOWED_CATEGORIES:
+        abort(400)
+
+    try:
+        date.fromisoformat(date_raw)
+    except ValueError:
+        return fail("Please enter a valid date.")
+
+    add_expense(session["user_id"], amount, category, date_raw, description or None)
+    return redirect(url_for("profile"))
 
 
 @app.route("/expenses/<int:id>/edit")

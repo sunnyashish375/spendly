@@ -15,6 +15,7 @@
                 <h1 class="profile-name">{{ name }}</h1>
                 <p class="profile-meta">{{ email }} &middot; Member since {{ member_since }}</p>
             </div>
+            <a href="{{ url_for('add_expense_route') }}" class="btn-primary" style="margin-left:auto;padding:0.45rem 1.1rem;font-size:0.9rem;white-space:nowrap;">+ Add Expense</a>
         </div>
 
         <div class="profile-filter-bar">
@@ -102,6 +103,7 @@
         {% else %}
         <div class="profile-empty">
             <p>No expenses yet. Start tracking your spending!</p>
+            <a href="{{ url_for('add_expense_route') }}" class="btn-primary" style="display:inline-block;margin-top:1rem;padding:0.55rem 1.25rem;">+ Add Expense</a>
         </div>
         {% endif %}
 
