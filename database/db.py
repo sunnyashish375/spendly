@@ -167,6 +167,27 @@ def get_categories():
     return [r["category"] for r in rows]
 
 
+def get_expense_by_id(expense_id, user_id):
+    conn = get_db()
+    row = conn.execute(
+        "SELECT * FROM expenses WHERE id = ? AND user_id = ?",
+        (expense_id, user_id)
+    ).fetchone()
+    conn.close()
+    return row
+
+
+def update_expense(expense_id, user_id, amount, category, date, description):
+    conn = get_db()
+    conn.execute(
+        "UPDATE expenses SET amount = ?, category = ?, date = ?, description = ? "
+        "WHERE id = ? AND user_id = ?",
+        (amount, category, date, description or None, expense_id, user_id)
+    )
+    conn.commit()
+    conn.close()
+
+
 def add_expense(user_id, amount, category, date, description):
     conn = get_db()
     conn.execute(
