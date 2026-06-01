@@ -85,6 +85,7 @@
                         <th>Category</th>
                         <th class="profile-th-desc">Description</th>
                         <th class="profile-th-amt">Amount</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -94,6 +95,11 @@
                         <td><span class="profile-badge" data-category="{{ e['category'] }}">{{ e["category"] }}</span></td>
                         <td class="profile-td-desc">{{ e["description"] or "—" }}</td>
                         <td class="profile-td-amt">&#8377;{{ "%.2f"|format(e["amount"]) }}</td>
+                        <td style="padding-left: 1.5rem; white-space: nowrap;">
+                            <a href="{{ url_for('edit_expense', id=e['id']) }}" style="color: var(--accent); font-size: 0.85rem;">Edit</a>
+                            &nbsp;·&nbsp;
+                            <a href="{{ url_for('delete_expense_route', id=e['id']) }}" style="color: var(--error, #e53e3e); font-size: 0.85rem;">Delete</a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
