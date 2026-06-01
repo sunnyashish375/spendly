@@ -190,6 +190,8 @@
 .profile-td-amt {
     text-align: right;
     padding-right: 0 !important;
+    width: 1%;
+    white-space: nowrap;
 }
 
 .profile-table tbody tr {
